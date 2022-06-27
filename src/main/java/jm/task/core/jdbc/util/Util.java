@@ -6,21 +6,30 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    public static Connection util() {
-        Connection conn = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/data";
-            Properties info = new Properties();
-            info.put("user", "root");
-            info.put("password", "1509507300");
+    private static Connection conn = null;
+    private static final String url = "jdbc:mysql://localhost:3306/data";
+    private static final String user = "root";
+    private static final String password = "1509507300";
 
+    public static void close() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static Connection util() {
+        try {
+            Properties info = new Properties();
+            info.put("user", user);
+            info.put("password", password);
             conn = DriverManager.getConnection(url, info);
             if (conn != null) {
                 System.out.println("Connected to the database successfully");
             }
-        } catch (SQLException ex) {
-            System.out.println("An error occurred. Maybe user/password is invalid");
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return conn;
     }

@@ -13,12 +13,12 @@ public class UserDaoJDBCImpl implements UserDao {
     static {
         conn = Util.util();
     }
+
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        try {
-            Statement statement = conn.createStatement();
+        try (Statement statement = conn.createStatement();) {
             statement.executeUpdate("create table users\n" +
                 "(\n" +
                 "    id       bigint      not null AUTO_INCREMENT\n" +
@@ -35,8 +35,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
-            Statement statement = conn.createStatement();
+        try (Statement statement = conn.createStatement()) {
             ResultSet res = statement.executeQuery("SELECT Count(*) FROM information_schema.tables WHERE table_name = 'users' LIMIT 1");
             res.next();
             if (2 == res.getInt(1)) {
@@ -48,9 +47,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            PreparedStatement statement =
-                    conn.prepareStatement("INSERT INTO users (name, lastName, age) VALUES(?, ?, ?)");
+        try (PreparedStatement statement =
+                     conn.prepareStatement("INSERT INTO users (name, lastName, age) VALUES(?, ?, ?)")) {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
@@ -62,11 +60,15 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try {
-            PreparedStatement preparedStatement =
-                    conn.prepareStatement("DELETE FROM users WHERE id=?");
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
+        try (Statement statement = conn.createStatement()) {
+            ResultSet res = statement.executeQuery("SELECT Count(*) FROM information_schema.tables WHERE table_name = 'users' LIMIT 1");
+            res.next();
+            if (2 == res.getInt(1)) {
+                PreparedStatement preparedStatement =
+                        conn.prepareStatement("DELETE FROM users WHERE id=?");
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -74,9 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-
-        try {
-            Statement statement = conn.createStatement();
+        try (Statement statement = conn.createStatement()) {
             String SQL = "SELECT * FROM users";
             ResultSet res = statement.executeQuery(SQL);
             while (res.next()) {
@@ -94,7 +94,15 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        dropUsersTable();
-        createUsersTable();
+        try (Statement statement = conn.createStatement()) {
+            ResultSet res = statement.executeQuery("SELECT Count(*) FROM information_schema.tables WHERE table_name = 'users' LIMIT 1");
+            res.next();
+            if (2 == res.getInt(1)) {
+                String SQL = "TRUNCATE TABLE users;";
+                statement.executeUpdate(SQL);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
