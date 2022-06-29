@@ -11,7 +11,7 @@ import static java.util.Locale.ROOT;
 public class UserDaoJDBCImpl implements UserDao {
     private static Connection conn;
     static {
-        conn = Util.util();
+        conn = Util.getConnection();
     }
 
     public UserDaoJDBCImpl() {

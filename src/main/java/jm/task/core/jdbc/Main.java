@@ -13,8 +13,8 @@ public class Main {
         users.saveUser("Старый","Мудень",(byte)60);
         users.saveUser("Мертвый","Пенсер",(byte)70);
         users.getAllUsers().forEach(System.out::println);
-        users.cleanUsersTable();
-        users.dropUsersTable();
+        //users.cleanUsersTable();
+        //users.dropUsersTable();
         Util.close();
     }
 }
