@@ -1,7 +1,7 @@
-package jm.task.core.jdbc.dao;
+package com.jdbc.dao;
 
-import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.util.Util;
+import com.jdbc.model.User;
+import com.jdbc.util.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import static java.util.Locale.ROOT;
 public class UserDaoJDBCImpl implements UserDao {
     private static Connection conn;
     static {
-        conn = Util.util();
+        conn = Util.getConnection();
     }
 
     public UserDaoJDBCImpl() {

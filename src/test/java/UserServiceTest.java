@@ -1,6 +1,6 @@
-import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserService;
-import jm.task.core.jdbc.service.UserServiceImpl;
+import com.jdbc.model.User;
+import com.jdbc.service.UserService;
+import com.jdbc.service.UserServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
