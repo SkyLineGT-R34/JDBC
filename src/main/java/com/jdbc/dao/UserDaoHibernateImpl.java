@@ -2,7 +2,6 @@ package com.jdbc.dao;
 
 import com.jdbc.model.User;
 import com.jdbc.util.Util;
-import jakarta.persistence.EntityManager;
 import org.hibernate.*;
 
 import java.util.*;
